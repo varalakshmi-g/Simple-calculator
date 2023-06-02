@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Calculator</title>
+  <style>
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simple Calculator</h1>
+
+  <input type="text" id="operand1" placeholder="Operand 1">
+  <input type="text" id="operand2" placeholder="Operand 2">
+
+  <br><br>
+   
+  <input type="radio" id="addition" name="operator" value="+"> +<br>
+  <input type="radio" id="subtraction" name="operator" value="-"> -<br>
+  <input type="radio" id="multiplication" name="operator" value="*"> *<br>
+  <input type="radio" id="division" name="operator" value="/"> /
+  
+  <br><br>
+
+  <button onclick="calculate()">Calculate</button>
+
+  <p id="result"></p>
+
+  <script>
+    function calculate() {
+      var operand1 = document.getElementById("operand1").value;
+      var operand2 = document.getElementById("operand2").value;
+
+      var operator = document.querySelector('input[name="operator"]:checked');
+
+      var resultElement = document.getElementById("result");
+      resultElement.innerHTML = "";
+
+      if (operand1 === "" || operand2 === "") {
+        resultElement.innerHTML = '<span class="error">Input all values</span>';
+        return;
+      }
+
+      if (!isNumeric(operand1) || !isNumeric(operand2)) {
+        resultElement.innerHTML = '<span class="error">Operands can only be digits</span>';
+        return;
+      }
+
+      operand1 = parseFloat(operand1);
+      operand2 = parseFloat(operand2);
+
+      if (operator.value === "/" && operand2 === 0) {
+        resultElement.innerHTML = '<span class="error">Cannot divide by 0</span>';
+        return;
+      }
+
+      var result = performOperation(operator.value, operand1, operand2);
+      if (result === null) {
+        resultElement.innerHTML = '<span class="error">Result out of bounds</span>';
+        return;
+      }
+
+      resultElement.innerHTML = '<span class="success">' + result.toFixed(3) + '</span>';
+    }
+
+    function isNumeric(value) {
+      return /^-?\d+$/.test(value);
+    }
+
+    function performOperation(operator, operand1, operand2) {
+      switch (operator) {
+        case "+":
+          return operand1 + operand2;
+        case "-":
+          return operand1 - operand2;
+        case "*":
+          return operand1 * operand2;
+        case "/":
+          return operand1 / operand2;
+        default:
+          return null;
+      }
+    }
+  </script>
+</body>
+</html>
